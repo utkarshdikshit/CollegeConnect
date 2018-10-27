@@ -23,7 +23,9 @@ router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 })
     .then(posts => res.json(posts))
-    .catch(err => res.status(404).json({ nopostsfound: "No posts found" }));
+    .catch(err =>
+      res.status(404).json({ nopostsfound: "No such posts found" })
+    );
 });
 
 // @route   GET api/posts/:id
@@ -33,7 +35,7 @@ router.get("/:id", (req, res) => {
   Post.findById(req.params.id)
     .then(post => res.json(post))
     .catch(err =>
-      res.status(404).json({ nopostfound: "No post found with that ID" })
+      res.status(404).json({ nopostfound: "No post found with this ID" })
     );
 });
 
@@ -77,13 +79,15 @@ router.delete(
           if (post.user.toString() !== req.user.id) {
             return res
               .status(401)
-              .json({ notauthorized: "User not authorized" });
+              .json({ notauthorized: "User is not authorized" });
           }
 
           // Delete
           post.remove().then(() => res.json({ success: true }));
         })
-        .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+        .catch(err =>
+          res.status(404).json({ postnotfound: "No such post found" })
+        );
     });
   }
 );
@@ -104,7 +108,7 @@ router.post(
           ) {
             return res
               .status(400)
-              .json({ alreadyliked: "User already liked this post" });
+              .json({ alreadyliked: "You have already liked this post" });
           }
 
           // Add user id to likes array
@@ -112,7 +116,9 @@ router.post(
 
           post.save().then(post => res.json(post));
         })
-        .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+        .catch(err =>
+          res.status(404).json({ postnotfound: "No such post found" })
+        );
     });
   }
 );
@@ -131,9 +137,9 @@ router.post(
             post.likes.filter(like => like.user.toString() === req.user.id)
               .length === 0
           ) {
-            return res
-              .status(400)
-              .json({ notliked: "You have not yet liked this post" });
+            return res.status(400).json({
+              notliked: "You have not yet liked this particular post"
+            });
           }
 
           // Get remove index
@@ -147,7 +153,9 @@ router.post(
           // Save
           post.save().then(post => res.json(post));
         })
-        .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+        .catch(err =>
+          res.status(404).json({ postnotfound: "No such post found" })
+        );
     });
   }
 );
@@ -182,7 +190,9 @@ router.post(
         // Save
         post.save().then(post => res.json(post));
       })
-      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+      .catch(err =>
+        res.status(404).json({ postnotfound: "No such post found" })
+      );
   }
 );
 
@@ -203,7 +213,7 @@ router.delete(
         ) {
           return res
             .status(404)
-            .json({ commentnotexists: "Comment does not exist" });
+            .json({ commentnotexists: "Required Comment does not exist" });
         }
 
         // Get remove index
@@ -216,7 +226,9 @@ router.delete(
 
         post.save().then(post => res.json(post));
       })
-      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+      .catch(err =>
+        res.status(404).json({ postnotfound: "No such post found" })
+      );
   }
 );
 
