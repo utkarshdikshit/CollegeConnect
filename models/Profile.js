@@ -12,7 +12,19 @@ const ProfileSchema = new Schema({
     required: true,
     max: 40
   },
-  company: {
+  mail: {
+    type: String,
+    required: true
+  },
+  contact: {
+    type: Number,
+    required: true
+  },
+  pincode: {
+    type: Number,
+    required: true
+  },
+  branch: {
     type: String
   },
   website: {
@@ -21,11 +33,12 @@ const ProfileSchema = new Schema({
   location: {
     type: String
   },
-  status: {
+  currenttitle: {
+    //student or professor etc.
     type: String,
     required: true
   },
-  skills: {
+  interests: {
     type: [String],
     required: true
   },
@@ -38,10 +51,6 @@ const ProfileSchema = new Schema({
   experience: [
     {
       title: {
-        type: String,
-        required: true
-      },
-      company: {
         type: String,
         required: true
       },
@@ -95,19 +104,10 @@ const ProfileSchema = new Schema({
     }
   ],
   social: {
-    youtube: {
-      type: String
-    },
-    twitter: {
-      type: String
-    },
     facebook: {
       type: String
     },
     linkedin: {
-      type: String
-    },
-    instagram: {
       type: String
     }
   },

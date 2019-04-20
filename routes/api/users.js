@@ -13,7 +13,9 @@ const ValidationLoginInput = require("../../validation/login");
 
 router.post("/register", (req, res) => {
   //Check Validation
+  console.log(req.body);
   const { errors, isValid } = ValidationRegisterInput(req.body);
+  console.log(errors);
   if (!isValid) {
     return res.status(400).json(errors);
   }

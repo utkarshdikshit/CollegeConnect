@@ -33,12 +33,48 @@ router.get(
   }
 );
 
+// @route   GET api/profile/all
+// @desc    Get all profiles of dept
+// @access  Public
 router.get("/all", (req, res) => {
+  const errors = {};
+
   Profile.find()
     .populate("user", ["name", "avatar"])
     .then(profiles => {
       if (!profiles) {
         errors.noprofile = "There are no profiles";
+        return res.status(404).json(errors);
+      }
+
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json({ profile: "There are no profiles" }));
+});
+
+router.get("/all/:currenttitle", (req, res) => {
+  Profile.find({ currenttitle: req.params.currenttitle })
+    .populate("user", ["name", "avatar"])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = "There are no profiles";
+        return res.status(404).json(errors);
+      }
+
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json({ noprofile: "There are no profiles" }));
+});
+
+router.get("/all/:currenttitle/:branch", (req, res) => {
+  Profile.find({
+    currenttitle: req.params.currenttitle,
+    branch: req.params.branch
+  })
+    .populate("user", ["name", "avatar"])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = "There are no such profiles";
         return res.status(404).json(errors);
       }
 
@@ -83,6 +119,8 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.body); /// console the error
+
     const { errors, isValid } = validateProfileInput(req.body);
 
     //Check Validation
@@ -94,23 +132,24 @@ router.post(
     const profileFields = {};
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
-    if (req.body.company) profileFields.company = req.body.company;
+    if (req.body.branch) profileFields.branch = req.body.branch;
     if (req.body.website) profileFields.website = req.body.website;
+    if (req.body.mail) profileFields.mail = req.body.mail;
+    if (req.body.contact) profileFields.contact = req.body.contact;
+    if (req.body.pincode) profileFields.pincode = req.body.pincode;
     if (req.body.location) profileFields.location = req.body.location;
     if (req.body.bio) profileFields.bio = req.body.bio;
-    if (req.body.status) profileFields.status = req.body.status;
+    if (req.body.currenttitle)
+      profileFields.currenttitle = req.body.currenttitle;
     if (req.body.githubusername)
       profileFields.githubusername = req.body.githubusername;
 
-    if (typeof req.body.skills !== "undefined")
-      profileFields.skills = req.body.skills.split(",");
+    if (typeof req.body.interests !== "undefined")
+      profileFields.interests = req.body.interests.split(",");
 
     profileFields.social = {};
-    if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
-    if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
     if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
-    if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
@@ -155,13 +194,15 @@ router.post(
     Profile.findOne({ user: req.user.id }).then(profile => {
       const newExp = {
         title: req.body.title,
-        company: req.body.company,
+        branch: req.body.branch,
         location: req.body.location,
         from: req.body.from,
         to: req.body.to,
         current: req.body.current,
         description: req.body.description
       };
+
+      console.log(newExp);
 
       // Add to exp array
       profile.experience.unshift(newExp);

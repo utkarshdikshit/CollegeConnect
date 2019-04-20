@@ -5,7 +5,7 @@ module.exports = function(data) {
   let errors = {};
 
   data.handle = !isEmpty(data.handle) ? data.handle : "";
-  data.status = !isEmpty(data.status) ? data.status : "";
+  data.currenttitle = !isEmpty(data.currenttitle) ? data.currenttitle : "";
   data.skills = !isEmpty(data.skills) ? data.skills : "";
 
   if (!Validator.isLength(data.handle, { min: 2, max: 40 })) {
@@ -16,12 +16,12 @@ module.exports = function(data) {
     errors.handle = "Handle is required";
   }
 
-  if (Validator.isEmpty(data.status)) {
-    errors.status = "Status is required";
+  if (Validator.isEmpty(data.currenttitle)) {
+    errors.currenttitle = "Status is required";
   }
 
-  if (Validator.isEmpty(data.skills)) {
-    errors.skills = "Skills cannot be empty";
+  if (Validator.isEmpty(data.interests)) {
+    errors.interests = "Interests cannot be empty";
   }
 
   if (!isEmpty(data.website)) {
@@ -30,16 +30,18 @@ module.exports = function(data) {
     }
   }
 
-  if (!isEmpty(data.youtube)) {
-    if (!Validator.isURL(data.youtube)) {
-      errors.youtube = "Not a valid URL";
-    }
+  if (isEmpty(data.mail)) {
+    errors.mail = "Enter your Mail id";
+  }
+  if (isEmpty(data.pincode)) {
+    errors.pincode = "Please enter your Pincode";
+  }
+  if (isEmpty(data.contact)) {
+    errors.contact = "Please Enter your Contact Number";
   }
 
-  if (!isEmpty(data.twitter)) {
-    if (!Validator.isURL(data.twitter)) {
-      errors.twitter = "Not a valid URL";
-    }
+  if (!Validator.isEmail(data.mail)) {
+    errors.mail = "Please enter a valid Email ID";
   }
 
   if (!isEmpty(data.facebook)) {
@@ -54,11 +56,19 @@ module.exports = function(data) {
     }
   }
 
-  if (!isEmpty(data.instagram)) {
+  /* if (!Validator.isLength(data.contact, { min: 10, max: 10 })) {
+    errors.contact = "Please enter a 10 digit contact number";
+  }
+
+  if (!Validator.isLength(data.pincode, { min: 6, max: 6 })) {
+    errors.pincode = "Please enter a 6 digit pincode";
+  }
+*/
+  /* if (!isEmpty(data.instagram)) {
     if (!Validator.isURL(data.instagram)) {
       errors.instagram = "Not a valid URL";
     }
-  }
+  } */
 
   return {
     errors,
