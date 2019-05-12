@@ -145,7 +145,7 @@ class CreateProfile extends Component {
                   value={this.state.pincode}
                   onChange={this.onChange}
                   error={errors.pincode}
-                  info="Your Email id"
+                  info="Pincode of your area"
                 />
                 <TextFieldGroup
                   placeholder="contact"

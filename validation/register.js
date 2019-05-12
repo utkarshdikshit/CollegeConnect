@@ -23,9 +23,16 @@ module.exports = function(data) {
     errors.email = "Email cannot be empty";
   }
 
-  if (!Validator.isEmail(data.email)) {
-    errors.email = "Email is Invalid";
+  if (
+    !Validator.isEmail(data.email) ||
+    data.email.indexOf("@mnit.ac.in") === -1
+  ) {
+    errors.email = "Email is Invalid or Use your MNIT Email ID";
   }
+
+  /*if (data.email.indexOf("@mnit.ac.in") === -1) {
+    errors.email = "Please use your MNIT Email ID";
+  }*/
 
   if (Validator.isEmpty(data.password)) {
     errors.password = "Password cannot be empty";

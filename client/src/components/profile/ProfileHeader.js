@@ -29,10 +29,7 @@ class ProfileHeader extends Component {
                 )}
               </p>
               <p className="lead text-center">
-                {profile.currenttitle}{" "}
-                {isEmpty(profile.branch) ? null : (
-                  <span>of {profile.branch}</span>
-                )}
+                {isEmpty(profile.branch) ? null : <span>{profile.branch}</span>}
               </p>
               {isEmpty(profile.pincode) ? null : <p>{profile.pincode}</p>}
               <p>
